@@ -1,0 +1,4 @@
+<resources>
+    <string name="top_level_route_home">Home</string>
+    <string name="top_level_route_profile">Profile</string>
+</resources>
