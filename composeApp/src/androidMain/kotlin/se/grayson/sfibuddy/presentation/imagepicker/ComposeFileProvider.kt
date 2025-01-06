@@ -1,0 +1,35 @@
+package se.grayson.sfibuddy.presentation.imagepicker
+
+import android.content.Context
+import android.net.Uri
+import android.util.Log
+import androidx.core.content.FileProvider
+import se.grayson.sfibuddy.R
+import java.io.File
+import java.util.Objects
+
+class ComposeFileProvider : FileProvider(
+    R.xml.path_provider
+) {
+    companion object {
+        private const val TAG = "ComposeFileProvider"
+
+        fun getImageUri(context: Context): Uri {
+            // 1
+            val tempFile = File.createTempFile(
+                "picture_${System.currentTimeMillis()}", ".png", context.cacheDir
+            ).apply {
+                createNewFile()
+            }
+            // 2
+            val authority = context.applicationContext.packageName + ".provider"
+            // 3
+            Log.i(TAG, "getImageUri: ${tempFile.absolutePath}")
+            return getUriForFile(
+                Objects.requireNonNull(context),
+                authority,
+                tempFile,
+            )
+        }
+    }
+}
