@@ -17,6 +17,10 @@ class AppNavActions(
         }
     }
 
+    val navigateToAddWord: () -> Unit = {
+        navigate(AppDestinations.ADD_WORD_ROUTE)
+    }
+
     /**
      * Navigate to a route.
      *

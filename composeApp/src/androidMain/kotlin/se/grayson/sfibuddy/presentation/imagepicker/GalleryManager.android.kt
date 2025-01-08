@@ -23,7 +23,6 @@ actual fun rememberGalleryManager(onResult: (SharedImage?) -> Unit): GalleryMana
                         )
                     )
                 )
-//
             }
         }
     return remember {

@@ -2,6 +2,7 @@ package se.grayson.sfibuddy.presentation.home
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -20,6 +21,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import org.jetbrains.compose.resources.stringResource
 import se.grayson.sfibuddy.domain.model.User
+import se.grayson.sfibuddy.presentation.addword.AddWordScreen
 import se.grayson.sfibuddy.presentation.home.AppDestinations.topLevelRoutes
 import se.grayson.sfibuddy.presentation.profile.ProfileScreen
 import sfibuddy.composeapp.generated.resources.Res
@@ -95,11 +97,18 @@ fun SFIBuddyGraph(
             }
         ) {
             composable(AppDestinations.HOME_ROUTE) {
-                HomeScreen(navigateToPickPhoto = { })
+                HomeScreen(
+                    modifier = Modifier.padding(innerPadding),
+                    navigateToAddWord = {
+                    appNavActions.navigateToAddWord()
+                })
             }
             composable(AppDestinations.PROFILE_ROUTE) {
                 ProfileScreen(navigateToLogin = {
                 })
+            }
+            composable(AppDestinations.ADD_WORD_ROUTE) {
+                AddWordScreen()
             }
         }
     }
@@ -110,6 +119,7 @@ object AppDestinations {
     const val HOME_ROUTE = "home_route"
     const val IMAGE_PICK_ROUTE = "image_pick_route"
     const val WORD_DEFINITION_ROUTE = "word_definition_route"
+    const val ADD_WORD_ROUTE = "add_word_route"
     const val LOGIN_ROUTE = "login_route"
     const val PROFILE_ROUTE = "profile_route"
 

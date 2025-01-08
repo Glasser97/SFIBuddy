@@ -18,11 +18,11 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    navigateToPickPhoto: () -> Unit
+    navigateToAddWord: () -> Unit
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         Button(
-            onClick = { navigateToPickPhoto() },
+            onClick = { navigateToAddWord() },
             modifier = Modifier.align(Alignment.BottomEnd).padding(12.dp),
             shape = CircleShape,
             elevation = ButtonDefaults.elevation(
