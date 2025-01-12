@@ -33,6 +33,7 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.accompanist.permissions)
+            implementation(libs.io.koin.android)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -44,6 +45,9 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.compose.navigation)
+            implementation(libs.compose.viewmodel)
+            implementation(libs.io.koin.core)
+            implementation(libs.io.koin.test)
         }
     }
 }

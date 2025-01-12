@@ -1,7 +1,7 @@
-package se.grayson.sfibuddy.presentation.home
+package se.grayson.sfibuddy.presentation.navigator
 
 import androidx.navigation.NavHostController
-import se.grayson.sfibuddy.presentation.home.AppDestinations.requireLogin
+import se.grayson.sfibuddy.presentation.navigator.AppDestinations.requireLogin
 
 class AppNavActions(
     private val navController: NavHostController

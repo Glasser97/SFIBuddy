@@ -15,7 +15,9 @@ compose-multiplatform = "1.7.0"
 junit = "4.13.2"
 kotlin = "2.1.0"
 compose-navigation = "2.8.0-alpha10"
+compose-viewmodel = "2.8.2"
 accompanist-permissions = "0.32.0"
+koin = "4.0.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -32,6 +34,12 @@ androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", nam
 androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 compose-navigation = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "compose-navigation" }
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist-permissions" }
+compose-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "compose-viewmodel" }
+io-koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
+io-koin-test = { group = "io.insert-koin", name = "koin-test", version.ref = "koin" }
+io-koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
+
+
 
 
 [plugins]

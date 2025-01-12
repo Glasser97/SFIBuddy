@@ -1,4 +1,4 @@
-package se.grayson.sfibuddy.presentation.home
+package se.grayson.sfibuddy.presentation.navigator.model
 
 import androidx.compose.ui.graphics.vector.ImageVector
 import org.jetbrains.compose.resources.StringResource

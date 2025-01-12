@@ -1,4 +1,4 @@
-package se.grayson.sfibuddy.presentation.home
+package se.grayson.sfibuddy.presentation.navigator
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
@@ -20,9 +20,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import org.jetbrains.compose.resources.stringResource
-import se.grayson.sfibuddy.domain.model.User
-import se.grayson.sfibuddy.presentation.addword.AddWordScreen
-import se.grayson.sfibuddy.presentation.home.AppDestinations.topLevelRoutes
+import se.grayson.sfibuddy.domain.profile.model.User
+import se.grayson.sfibuddy.presentation.addword.ui.AddWordScreen
+import se.grayson.sfibuddy.presentation.home.HomeScreen
+import se.grayson.sfibuddy.presentation.navigator.AppDestinations.isTopLevelScreen
+import se.grayson.sfibuddy.presentation.navigator.AppDestinations.topLevelRoutes
+import se.grayson.sfibuddy.presentation.navigator.model.TopLevelRoute
 import se.grayson.sfibuddy.presentation.profile.ProfileScreen
 import sfibuddy.composeapp.generated.resources.Res
 import sfibuddy.composeapp.generated.resources.top_level_route_home
@@ -39,30 +42,37 @@ fun SFIBuddyGraph(
     Scaffold(
         modifier = modifier,
         bottomBar = {
-            BottomNavigation {
-                val navBackStackEntry by navController.currentBackStackEntryAsState()
-                val currentDestination = navBackStackEntry?.destination
-                topLevelRoutes.forEach { route ->
-                    BottomNavigationItem(
-                        icon = { Icon(route.icon, contentDescription = stringResource(route.name))},
-                        label = { Text(stringResource(route.name))},
-                        onClick = {
-                            navController.navigate(route.route) {
-                                // Pop up to the start destination of the graph to
-                                // avoid building up a large stack of destinations
-                                // on the back stack as users select items
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentDestination = navBackStackEntry?.destination
+            if (isTopLevelScreen(currentDestination?.route)) {
+                BottomNavigation {
+                    topLevelRoutes.forEach { route ->
+                        BottomNavigationItem(
+                            icon = {
+                                Icon(
+                                    route.icon,
+                                    contentDescription = stringResource(route.name)
+                                )
+                            },
+                            label = { Text(stringResource(route.name)) },
+                            onClick = {
+                                navController.navigate(route.route) {
+                                    // Pop up to the start destination of the graph to
+                                    // avoid building up a large stack of destinations
+                                    // on the back stack as users select items
+                                    popUpTo(navController.graph.findStartDestination().id) {
+                                        saveState = true
+                                    }
+                                    // Avoid multiple copies of the same destination when
+                                    // reselect the same item
+                                    launchSingleTop = true
+                                    // Restore state when reselect a previously selected item
+                                    restoreState = true
                                 }
-                                // Avoid multiple copies of the same destination when
-                                // reselecting the same item
-                                launchSingleTop = true
-                                // Restore state when reselecting a previously selected item
-                                restoreState = true
-                            }
-                        },
-                        selected = currentDestination?.route == route.route
-                    )
+                            },
+                            selected = currentDestination?.route == route.route
+                        )
+                    }
                 }
             }
         }
@@ -100,15 +110,19 @@ fun SFIBuddyGraph(
                 HomeScreen(
                     modifier = Modifier.padding(innerPadding),
                     navigateToAddWord = {
-                    appNavActions.navigateToAddWord()
-                })
+                        appNavActions.navigateToAddWord()
+                    })
             }
             composable(AppDestinations.PROFILE_ROUTE) {
                 ProfileScreen(navigateToLogin = {
                 })
             }
             composable(AppDestinations.ADD_WORD_ROUTE) {
-                AddWordScreen()
+                AddWordScreen(
+                    onNavigateUp = {
+                        appNavActions.navigateUp()
+                    }
+                )
             }
         }
     }
@@ -131,6 +145,15 @@ object AppDestinations {
         TopLevelRoute(Res.string.top_level_route_home, HOME_ROUTE, Icons.Filled.Home),
         TopLevelRoute(Res.string.top_level_route_profile, PROFILE_ROUTE, Icons.Filled.Person)
     )
+
+    fun isTopLevelScreen(routeStr: String?): Boolean {
+        topLevelRoutes.forEach { route ->
+            if (route.route == routeStr) {
+                return true
+            }
+        }
+        return false
+    }
 
     fun requireLogin(route: String, userInfo: User? = null): Boolean {
         return requiredLoginRoutes.contains(route) &&

@@ -45,6 +45,7 @@ actual fun rememberCameraManager(onResult: (SharedImage?) -> Unit): CameraManage
     }
 }
 
+@Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
 actual class CameraManager actual constructor(
     private val onLaunch: () -> Unit
 ) {

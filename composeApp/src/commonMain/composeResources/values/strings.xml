@@ -1,4 +1,9 @@
 <resources>
     <string name="top_level_route_home">Home</string>
     <string name="top_level_route_profile">Profile</string>
+    <string name="add_word_done">Done</string>
+    <string name="request_permission_title">Permission Required</string>
+    <string name="request_permission_content">To take photo, please grant this permission. You can manage permissions in your device settings.</string>
+    <string name="settings">Settings</string>
+    <string name="cancel">Cancel</string>
 </resources>
