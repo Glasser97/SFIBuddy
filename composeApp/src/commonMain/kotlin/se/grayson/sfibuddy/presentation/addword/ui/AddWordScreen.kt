@@ -138,8 +138,9 @@ fun AddWordScreenViewModeless(
         ) {
             HorizontalPager(
                 state = pagerState,
-                pageSpacing = 12.dp,
-                modifier = Modifier.fillMaxWidth().height(250.dp),
+                contentPadding = PaddingValues(horizontal = 24.dp),
+                pageSpacing = 15.dp,
+                modifier = Modifier.fillMaxWidth().fillMaxHeight(fraction = 0.7f),
                 key = {
                     imageList.getOrNull(it)?.imageId ?: 0
                 }
@@ -160,10 +161,11 @@ fun AddWordScreenViewModeless(
 
             Row(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 IconButton(
+                    modifier = Modifier.size(45.dp),
                     onClick = {
                         onDeleteImage(pagerState.currentPage)
                     }
@@ -176,6 +178,7 @@ fun AddWordScreenViewModeless(
                 }
                 Spacer(modifier = Modifier.width(20.dp))
                 IconButton(
+                    modifier = Modifier.size(45.dp),
                     onClick = {
                         onUpdateLaunchCamera(true)
                     }
@@ -230,7 +233,6 @@ fun AddWordTopBar(
 @Composable
 fun AddWordScreenPreview() {
     MaterialTheme {
-        AddWordScreenViewModeless(
-        )
+        AddWordScreenViewModeless()
     }
 }
