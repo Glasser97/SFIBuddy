@@ -26,6 +26,9 @@ class AddWordViewModel : ViewModel() {
     private val _imageList: MutableStateFlow<MutableList<DisplayImage>> = MutableStateFlow(mutableListOf())
     val imageList: StateFlow<List<DisplayImage>> get() = _imageList
 
+    private val _showLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val showLoading: StateFlow<Boolean> = _showLoading
+
     // endregion
 
     // region public
@@ -36,6 +39,7 @@ class AddWordViewModel : ViewModel() {
 
     fun addImage(image: SharedImage) {
         viewModelScope.launch {
+            _showLoading.update { true }
             val bitmap = withContext(Dispatchers.IO) {
                 image.toImageBitmap()
             }
@@ -44,6 +48,7 @@ class AddWordViewModel : ViewModel() {
                 println("bitmap.HashCode:${bitmap.hashCode()}")
                 add(DisplayImage(bitmap.hashCode(), bitmap))
             }
+            _showLoading.update { false }
         }
     }
 

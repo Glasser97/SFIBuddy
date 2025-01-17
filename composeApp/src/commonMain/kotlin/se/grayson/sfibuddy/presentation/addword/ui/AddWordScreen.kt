@@ -1,6 +1,7 @@
 package se.grayson.sfibuddy.presentation.addword.ui
 
 import AlertMessageDialog
+import FullScreenLoadingDialog
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
@@ -39,10 +40,12 @@ fun AddWordScreen(
 ) {
     val isLaunchCamera: Boolean by viewModel.isLaunchCamera.collectAsStateWithLifecycle()
     val imageList by viewModel.imageList.collectAsStateWithLifecycle()
+    val isShowLoading  by viewModel.showLoading.collectAsStateWithLifecycle()
 
     AddWordScreenViewModeless(
         isLaunchCamera = isLaunchCamera,
         imageList = imageList,
+        isShowLoading = isShowLoading,
         modifier = modifier,
         onNavigateUp = onNavigateUp,
         onAddImage = { viewModel.addImage(it) },
@@ -55,6 +58,7 @@ fun AddWordScreen(
 fun AddWordScreenViewModeless(
     isLaunchCamera: Boolean = false,
     imageList: List<DisplayImage> = emptyList(),
+    isShowLoading: Boolean = false,
     modifier: Modifier = Modifier,
     onNavigateUp: () -> Unit = {},
     onAddImage: (SharedImage) -> Unit = {},
@@ -131,64 +135,72 @@ fun AddWordScreenViewModeless(
                 onTakeImageDone = {}
             )
         }) { innerPadding ->
-        Column(
-            modifier = Modifier.padding(innerPadding),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+        Box(
+            modifier = Modifier.padding(innerPadding)
         ) {
-            HorizontalPager(
-                state = pagerState,
-                contentPadding = PaddingValues(horizontal = 24.dp),
-                pageSpacing = 15.dp,
-                modifier = Modifier.fillMaxWidth().fillMaxHeight(fraction = 0.7f),
-                key = {
-                    imageList.getOrNull(it)?.imageId ?: 0
+            Column(
+                modifier = Modifier,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                HorizontalPager(
+                    state = pagerState,
+                    contentPadding = PaddingValues(horizontal = 24.dp),
+                    pageSpacing = 15.dp,
+                    modifier = Modifier.fillMaxWidth().fillMaxHeight(fraction = 0.7f),
+                    key = {
+                        imageList.getOrNull(it)?.imageId ?: 0
+                    }
+                ) { page ->
+                    Image(
+                        bitmap = imageList[page].bitmap,
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize()
+                    )
                 }
-            ) { page ->
-                Image(
-                    bitmap = imageList[page].bitmap,
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize()
-                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = "${pagerState.currentPage + 1} / ${imageList.size}",
+                    fontSize = 16.sp,
+                    )
+
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                    IconButton(
+                        modifier = Modifier.size(45.dp),
+                        onClick = {
+                            onDeleteImage(pagerState.currentPage)
+                        }
+                    ) {
+                        Icon(
+                            painterResource(Res.drawable.ic_delete_24px),
+                            contentDescription = null,
+                            tint = MaterialTheme.colors.primary
+                        )
+                    }
+                        Spacer(modifier = Modifier.width(20.dp))
+                        IconButton(
+                            modifier = Modifier.size(45.dp),
+                            onClick = {
+                                onUpdateLaunchCamera(true)
+                            }
+                        ) {
+                            Icon(
+                                painterResource(Res.drawable.ic_add_circle_24px),
+                                contentDescription = null,
+                                tint = MaterialTheme.colors.primary
+                            )
+                        }
+                }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = "${pagerState.currentPage + 1} / ${imageList.size}",
-                fontSize = 16.sp,
-            )
-
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                IconButton(
-                    modifier = Modifier.size(45.dp),
-                    onClick = {
-                        onDeleteImage(pagerState.currentPage)
-                    }
-                ) {
-                    Icon(
-                        painterResource(Res.drawable.ic_delete_24px),
-                        contentDescription = null,
-                        tint = MaterialTheme.colors.primary
-                    )
-                }
-                Spacer(modifier = Modifier.width(20.dp))
-                IconButton(
-                    modifier = Modifier.size(45.dp),
-                    onClick = {
-                        onUpdateLaunchCamera(true)
-                    }
-                ) {
-                    Icon(
-                        painterResource(Res.drawable.ic_add_circle_24px),
-                        contentDescription = null,
-                        tint = MaterialTheme.colors.primary
-                    )
-                }
+            if (isShowLoading) {
+                FullScreenLoadingDialog()
             }
         }
     }
